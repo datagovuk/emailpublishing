@@ -27,3 +27,6 @@ datasets:
 
 emails:
   - ".*@.*"
+
+users:
+  - user@some.email.address.com

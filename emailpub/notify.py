@@ -11,5 +11,7 @@ def main():
     config.load_config()
     print "Notifying users of upcoming items"
 
-    address = common.generate_token_and_address("ross.jones@digital.cabinet-office.gov.uk", "test-dataset")
-    common.send_notification("ross.jones@digital.cabinet-office.gov.uk", "data.gov.uk <{}>".format(address))
+    for user in config.get_users():
+        dataset = config.get_random_dataset()
+        address = common.generate_token_and_address(user, dataset.get('name'))
+        common.send_notification(user, "data.gov.uk <{}>".format(address), dataset)

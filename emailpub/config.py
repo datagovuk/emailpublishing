@@ -1,4 +1,5 @@
 import os
+import random
 import sys
 
 from ckanapi import RemoteCKAN
@@ -40,6 +41,13 @@ def ckan():
 
 def get_allowed_emails():
     return _CONFIG.get('emails')
+
+def get_users():
+    return _CONFIG.get('users')
+
+def get_random_dataset():
+    datasets = get_datasets()
+    return random.choice(datasets)
 
 def get_datasets():
     from common import random_date

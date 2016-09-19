@@ -98,14 +98,14 @@ def get_latest_messages(n=10):
     return messages
 
 
-def send_notification(email, frm):
+def send_notification(email, frm, dataset):
     settings = config.outgoing_mail()
 
     template_html = env.get_template('notification.html')
-    rendered_html = template_html.render().encode('utf-8')
+    rendered_html = template_html.render(dataset=dataset).encode('utf-8')
 
     template_text = env.get_template('notification.txt')
-    rendered_text = template_text.render()
+    rendered_text = template_text.render(dataset=dataset).encode('utf-8')
 
     msg = MIMEMultipart('alternative')
     msg['Subject'] = "Dataset due for update"
