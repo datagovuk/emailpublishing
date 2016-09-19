@@ -17,6 +17,9 @@ def load_config():
 
     _CONFIG = yaml.load(open(loc, "r").read())
 
+def this_email():
+    return _CONFIG.get('from')
+
 def outgoing_mail():
     return _CONFIG.get('smtp')
 

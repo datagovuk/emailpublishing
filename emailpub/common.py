@@ -61,7 +61,7 @@ def generate_schedule(email):
 
     msg = MIMEMultipart('alternative')
     msg['Subject'] = "Publishing Schedule"
-    msg['From'] = "publish@data.gov.uk"
+    msg['From'] = config.this_email()
     msg['To'] = email
 
     part1 = MIMEText(rendered_text, 'plain')
@@ -81,7 +81,7 @@ def generate_schedule(email):
     s = sc(settings.get('host'))
     s.ehlo_or_helo_if_needed()
     s.login(settings.get('username'), settings.get('password'))
-    s.sendmail("publish@data.gov.uk", email, msg.as_string())
+    s.sendmail(config.this_email(), email, msg.as_string())
     s.quit()
 
 

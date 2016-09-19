@@ -1,0 +1,29 @@
+
+from: "from address"
+
+smtp:
+  host: smtp.gmail.com
+  port: 25
+  username: username
+  password: password
+  tls: true
+
+pop3:
+  host: pop.gmail.com
+  port: 995
+  username: username
+  password: password
+  tls: true
+
+ckan:
+  server: "https://test.data.gov.uk"
+  apikey: ""
+
+datasets:
+  - financial-transactions-data-fco
+  - financial-transactions-data-co
+  - financial-transactions-data-dft
+  - financial-transactions-data-defra
+
+emails:
+  - ".*@.*"
