@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 
 config.yml
+scraperwiki.sqlite
 
 # C extensions
 *.so

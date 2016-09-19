@@ -1,14 +1,55 @@
-from datetime import timedelta, datetime
-from random import randint
 import email
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 import poplib
 import smtplib
+from datetime import timedelta, datetime
+from random import randint
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 import config
+import scraperwiki
 
 from jinja2 import Environment, PackageLoader
+
+
+def raw_email(addr):
+    if '<' in addr:
+        email = addr[addr.index("<")+1:-1]
+    else:
+        email = addr
+
+    return email
+def token_from_email(email):
+    at = email[0:email.index("@")]
+    return at[at.index('+')+1:]
+
+
+def generate_token_and_address(email, dataset):
+    import uuid
+
+    d = {
+        "token": str(uuid.uuid4()),
+        "email": email,
+        "dataset": dataset
+    }
+    scraperwiki.sql.save(["token"], d, table_name="tokens")
+
+    address = config.this_email()
+    at = address.index("@")
+    new_address = address[0:at] + "+{}".format(d['token']) + address[at:]
+
+    return new_address
+
+def validate_token(token, user_email):
+    res = scraperwiki.sql.select("* FROM tokens WHERE token=?", [token])
+    if not res:
+        return False, None
+
+    record = res[0]
+    if record['email'] != raw_email(user_email):
+        return False, None
+
+    return True, record['dataset']
 
 
 """
@@ -48,6 +89,42 @@ def get_latest_messages(n=10):
 
 env = Environment(loader=PackageLoader('emailpub', 'templates'))
 
+def send_notification(email, frm):
+    settings = config.outgoing_mail()
+
+    template_html = env.get_template('notification.html')
+    rendered_html = template_html.render().encode('utf-8')
+
+    template_text = env.get_template('notification.txt')
+    rendered_text = template_text.render()
+
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = "Dataset due for update"
+    msg['From'] = frm
+    msg['To'] = email
+
+    msg.add_header('reply-to', frm)
+
+    part1 = MIMEText(rendered_text, 'plain')
+    part2 = MIMEText(rendered_html, 'html')
+
+    msg.attach(part1)
+    msg.attach(part2)
+
+    sc = None
+    if settings.get('tls'):
+        sc = smtplib.SMTP_SSL
+    else:
+        sc = smtplib.SMTP
+
+    s = sc(settings.get('host'))
+    s.ehlo_or_helo_if_needed()
+
+    s.login(settings.get('username'), settings.get('password'))
+    s.sendmail(frm, email, msg.as_string())
+    s.quit()
+
+
 def generate_schedule(email):
     datasets = config.get_datasets()
 
@@ -75,8 +152,6 @@ def generate_schedule(email):
         sc = smtplib.SMTP_SSL
     else:
         sc = smtplib.SMTP
-
-    print msg
 
     s = sc(settings.get('host'))
     s.ehlo_or_helo_if_needed()
