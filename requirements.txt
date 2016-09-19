@@ -1,0 +1,3 @@
+pyyaml==3.12
+ckanapi==3.6
+Jinja2==2.8
