@@ -51,7 +51,7 @@ publishing data, then that clearly is a problem.
 
 #### TODO:
 
- * Add a token to all outgoing notification emails so that we can see if we get it back in the response.
+ * ~~Add a token to all outgoing notification emails so that we can see if we get it back in the response.~~
  * Make sure we tell users after we have added a data file so they can check.
  * Time limit the replies
  * Check DKIM/SPF etc to make sure the email server is also confident on who the sender is.

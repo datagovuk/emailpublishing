@@ -11,7 +11,10 @@ import scraperwiki
 
 from jinja2 import Environment, PackageLoader
 
+env = Environment(loader=PackageLoader('emailpub', 'templates'))
 
+""" Strips the email part from one that looks like
+    NAME <email> """
 def raw_email(addr):
     if '<' in addr:
         email = addr[addr.index("<")+1:-1]
@@ -19,11 +22,17 @@ def raw_email(addr):
         email = addr
 
     return email
+
+""" Strips the token from an email address, where the token
+    is in the +part of the address """
 def token_from_email(email):
+    if not '+' in email:
+        return ''
     at = email[0:email.index("@")]
     return at[at.index('+')+1:]
 
-
+""" Given an email address and the name of a dataset, will return a
+newly formatted email address with a token inserted """
 def generate_token_and_address(email, dataset):
     import uuid
 
@@ -40,6 +49,8 @@ def generate_token_and_address(email, dataset):
 
     return new_address
 
+""" Given a token and a user's email address, will either fail to validate
+or will return the name of the dataset the user is working with """
 def validate_token(token, user_email):
     res = scraperwiki.sql.select("* FROM tokens WHERE token=?", [token])
     if not res:
@@ -87,8 +98,6 @@ def get_latest_messages(n=10):
     return messages
 
 
-env = Environment(loader=PackageLoader('emailpub', 'templates'))
-
 def send_notification(email, frm):
     settings = config.outgoing_mail()
 
@@ -124,7 +133,7 @@ def send_notification(email, frm):
     s.sendmail(frm, email, msg.as_string())
     s.quit()
 
-
+""" Generate a schedule for the user with the given email address """
 def generate_schedule(email):
     datasets = config.get_datasets()
 
@@ -159,7 +168,7 @@ def generate_schedule(email):
     s.sendmail(config.this_email(), email, msg.as_string())
     s.quit()
 
-
+""" Pick a random date between two provided dates """
 def random_date(start, end):
     res = start + timedelta(
         seconds=randint(0, int((end - start).total_seconds())))
