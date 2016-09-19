@@ -37,3 +37,27 @@ To send notifications, you should use the ```notify``` command which is installe
 #### Handling responses
 
 To handles responses, you should use the ```respond``` command which is installed in your virtualenv
+
+### Security
+
+As email isn't very secure, and it is possible to some degree to fake the sender we have to take
+extra steps to make sure the user is allowed to publish data.
+
+If someone were to fake the email address of a user, to obtain a schedule, we haven't really
+leaked anything and so it is probably not a problem.
+
+If someone were to fake the email address of the user and know how to build a target address for
+publishing data, then that clearly is a problem.
+
+#### TODO:
+
+ * Add a token to all outgoing notification emails so that we can see if we get it back in the response.
+ * Make sure we tell users after we have added a data file so they can check.
+ * Time limit the replies
+ * Check DKIM/SPF etc to make sure the email server is also confident on who the sender is.
+
+
+
+
+
+
