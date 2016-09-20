@@ -64,6 +64,9 @@ def validate_token(token, user_email):
 
     return True, record['dataset']
 
+""" Mark the given token as used """
+def invalidate_token(token):
+    scraperwiki.sql.execute("delete FROM tokens WHERE token=?", [token])
 
 """
 Get the latest n messages from the POP3 server.

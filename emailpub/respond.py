@@ -5,8 +5,11 @@ import config
 from common import (generate_schedule,
                     get_latest_messages,
                     validate_token,
+                    invalidate_token,
                     raw_email,
                     token_from_email)
+
+URL_REGEX = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
 
 def email_allowed(email):
     allowed = False
@@ -55,9 +58,29 @@ def main(cnf=None):
             continue
 
         print "Looking for URL to add to {}".format(dataset)
+        process = None
+        payloads = message.get_payload()
 
+        (payload,) = [p for p in payloads if p.get_content_type() == "text/plain"]
 
+        m = [r for r in re.findall(URL_REGEX, payload.as_string()[0:1024])
+             if not config.ckan_host() in r]
+        if not m:
+            print "Could not find any URLs"
+            continue
 
+        first_url = m[0]
+        print "Processing first URL: {} and adding to {}".format(first_url, dataset)
 
+        """
+        print config.ckan().action.resource_create(**{
+            'package_id': dataset,
+            'url': first_url,
+            'description': 'CSV',
+            'format': 'CSV',
+            'date': '01/01/2016'
+        })
+        invalidate_token(token)
+        """
 
 
