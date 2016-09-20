@@ -1,3 +1,4 @@
+is_test: true
 
 from: "test@localhost.local"
 

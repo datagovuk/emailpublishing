@@ -3,7 +3,7 @@ import re
 import config
 
 from common import generate_schedule, get_latest_messages, validate_token, raw_email
-
+from emailpub.lib.fakepop import FakePOP3
 
 def email_allowed(email):
     allowed = False
@@ -15,8 +15,9 @@ def email_allowed(email):
 
     return allowed
 
-def main():
-    config.load_config()
+def main(cnf=None):
+    config.load_config(cnf)
+
     print "Responding to emails"
 
     # Connect and grab the 10 latest emails
@@ -28,7 +29,6 @@ def main():
 
         to = message['Delivered-to']
         frm = message['From']
-
         email = raw_email(frm)
 
         if not email_allowed(email):

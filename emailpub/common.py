@@ -6,6 +6,8 @@ from random import randint
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+from emailpub.lib.fakepop import FakePOP3
+
 import config
 import scraperwiki
 
@@ -66,12 +68,14 @@ def validate_token(token, user_email):
 """
 Get the latest n messages from the POP3 server.
 """
-def get_latest_messages(n=10, pp=None):
+def get_latest_messages(n=10):
     messages = []
     settings = config.incoming_mail()
 
     pop = None
-    if not pp:
+    if config.is_test():
+        pp = FakePOP3
+    else:
         if settings.get('tls'):
             pp = poplib.POP3_SSL
         else:

@@ -9,6 +9,9 @@ _DATASETS = []
 _CONFIG = {}
 _CKAN = None
 
+def is_test():
+    return _CONFIG.get('is_test', False)
+
 def load_config(config_file=None):
     global _CONFIG
     loc = config_file or os.environ.get("EMAIL_PUB_CONFIG")

@@ -43,7 +43,8 @@ class FakePOP3(POP3):
     def retr(self, which):
         # ['response', ['line', ...], octets]
         filename = self.files[which-1]
-        return ('response', open(filename, 'r').xreadlines(), None)
+        content = [x.rstrip() for x in open(filename, 'rU').xreadlines()]
+        return ('response', content, None)
 
     def quit(self):
         pass
