@@ -37,14 +37,13 @@ def main():
 
         if not '+' in to:
             print "Generating schedule for {}".format(email)
-            #generate_schedule(email)
+            generate_schedule(email)
             continue
 
         # We need to extract the token from the email address (first+TOKEN@....)
         # and ensure it matches the email address we received.
         first = to[:to.index("@")]
         token = first[first.index("+")+1:]
-
 
         print "Looking for token - {}".format(token)
         success, dataset = validate_token(token, frm)

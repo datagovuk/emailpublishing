@@ -66,15 +66,16 @@ def validate_token(token, user_email):
 """
 Get the latest n messages from the POP3 server.
 """
-def get_latest_messages(n=10):
+def get_latest_messages(n=10, pp=None):
     messages = []
     settings = config.incoming_mail()
 
     pop = None
-    if settings.get('tls'):
-        pp = poplib.POP3_SSL
-    else:
-        pp = poplib.POP3
+    if not pp:
+        if settings.get('tls'):
+            pp = poplib.POP3_SSL
+        else:
+            pp = poplib.POP3
 
     pop = pp(settings.get('host'), settings.get('port'))
     pop.set_debuglevel(1)
@@ -92,7 +93,6 @@ def get_latest_messages(n=10):
         mail = email.message_from_string('\n'.join(content_lines))
         messages.append(mail)
 
-    pop.rset()
     pop.quit()
 
     return messages

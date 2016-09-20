@@ -1,0 +1,30 @@
+
+from: "test@localhost.local"
+
+smtp:
+  host: localhost
+  port: 25
+  username: test
+  password: test
+  tls: false
+
+pop3:
+  host: localhost
+  port: 110
+  username: test
+  password: test
+  tls: false
+
+ckan:
+  server: ""
+  apikey: ""
+
+datasets:
+  - financial-transactions-data-fco
+  - financial-transactions-data-co
+  - financial-transactions-data-dft
+  - financial-transactions-data-defra
+
+emails:
+  - ".*@.*"
+

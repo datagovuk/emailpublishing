@@ -9,9 +9,9 @@ _DATASETS = []
 _CONFIG = {}
 _CKAN = None
 
-def load_config():
+def load_config(config_file=None):
     global _CONFIG
-    loc = os.environ.get("EMAIL_PUB_CONFIG")
+    loc = config_file or os.environ.get("EMAIL_PUB_CONFIG")
     if not loc:
         print "Need to specify location of config file with EMAIL_PUB_CONFIG"
         sys.exit(1)
