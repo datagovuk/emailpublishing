@@ -30,6 +30,7 @@ setup(
         'console_scripts': [
             'notify=emailpub.notify:main',
             'respond=emailpub.respond:main',
+            'test_templates=emailpub.templategen:main'
         ],
     }
 )

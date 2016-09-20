@@ -16,9 +16,10 @@ email then they will receive a schedule of releases that are due.
 
 1. Create a virtualenv
 2. Clone this repo
-3. ```pip install -r requirements.txt```
-4. Copy sample_config.yml to config.yml
-5. Edit config.yml
+3. python setup.py develop
+4. ```pip install -r requirements.txt```
+5. Copy sample_config.yml to config.yml
+6. Edit config.yml
 
 
 ### Running the prototype
@@ -37,6 +38,14 @@ To send notifications, you should use the ```notify``` command which is installe
 #### Handling responses
 
 To handles responses, you should use the ```respond``` command which is installed in your virtualenv
+
+#### Testing template generation
+
+To test how the HTML emails look, there is a command that can be run that will generate a test email (per template paid) and send it to the specified address
+
+```bash
+test_templates --to my@mail.com
+```
 
 ### Security
 

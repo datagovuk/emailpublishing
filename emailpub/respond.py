@@ -2,8 +2,11 @@ import re
 
 import config
 
-from common import generate_schedule, get_latest_messages, validate_token, raw_email
-from emailpub.lib.fakepop import FakePOP3
+from common import (generate_schedule,
+                    get_latest_messages,
+                    validate_token,
+                    raw_email,
+                    token_from_email)
 
 def email_allowed(email):
     allowed = False
@@ -42,8 +45,7 @@ def main(cnf=None):
 
         # We need to extract the token from the email address (first+TOKEN@....)
         # and ensure it matches the email address we received.
-        first = to[:to.index("@")]
-        token = first[first.index("+")+1:]
+        token = token_from_email(to)
 
         print "Looking for token - {}".format(token)
         success, dataset = validate_token(token, frm)
