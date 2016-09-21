@@ -1,36 +1,45 @@
+<body style="font-family: Helvetica, sans-serif">
+    <div style="background-color: #8bc658; color: white; padding: .3em .4em; font-size: 30px; font-weight: bold">
+        data<span>.</span>gov<span>.</span>uk
+    </div>
 
+    <div style="padding: 0 10px; font-size: 14px">
+        <div style="background-color: #eee; padding: 10px; margin-top: 10px">
+        This email is sent from an un-attended account.  If you need help please email
+        <a href="mailto:team@data.gov.uk">Support</a>
+        </div>
 
-<div style="padding: 8px; background-color: #eee;">
-This email is sent from an un-attended account.  If you need help please email
-<a href="mailto:team@data.gov.uk">Support</a>
-</div>
+        <h2>Publishing Schedule</h2>
 
+        <p>Your schedule for data release is listed below.</p>
 
-<h2>Publishing Schedule</h2>
+        <table style="border-collapse: collapse; border-spacing: 0; width: 100%">
+            <tr style="line-height: 3">
+                <th style="text-align: left; border-bottom: 1px solid #bfc1c3">Dataset</th>
+                <th style="text-align: left; border-bottom: 1px solid #bfc1c3">Organisation</th>
+                <th style="text-align: left; border-bottom: 1px solid #bfc1c3">Due date</th>
+                <th style="text-align: right; border-bottom: 1px solid #bfc1c3"></th>
+            </tr>
+            {% for dataset in datasets %}
+            <tr style="line-height: 3">
+                <td style="text-align: left; border-bottom: 1px solid #bfc1c3; padding-right: 5px">
+                    {{dataset.title}}
+                </td>
+                <td style="text-align: left; border-bottom: 1px solid #bfc1c3; padding-right: 5px">
+                    {{dataset.organization.title}}
+                </td>
+                <td style="text-align: left; border-bottom: 1px solid #bfc1c3; padding-right: 5px">
+                    {{dataset.update_due}}
+                </td>
+                <td style="text-align: right; border-bottom: 1px solid #bfc1c3">
+                    <a href="https://test.data.gov.uk/dataset/{{dataset.name}}">view</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
 
-<p>Your schedule for data release is listed below.</p>
-
-<table>
-    <tr>
-        <th>Dataset</th>
-        <th>Organisation</th>
-        <th>Due date</th>
-        <th></th>
-    </tr>
-    {% for dataset in datasets %}
-    <tr>
-        <td>{{dataset.title}}</td>
-        <td>{{dataset.organization.title}}</td>
-        <td>
-            {{dataset.update_due}}
-        </td>
-        <td>
-            <a href="https://test.data.gov.uk/dataset/{{dataset.name}}">view</a>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-
-<p>
-You will receive an email 7 days before an update is due where you can reply with the URL to the new data file.
-</p>
+        <p style="margin-top: 14px">
+          You will receive an email 7 days before an update is due where you can reply with the URL to the new data file.
+        </p>
+    </div>
+</body>
