@@ -51,11 +51,14 @@ def main(cnf=None):
         token = token_from_email(to)
 
         print "Looking for token - {}".format(token)
-        success, dataset = validate_token(token, frm)
+        success, record = validate_token(token, frm)
         if not success:
             # Notify user of failure?
             print "FAILED to find a record for the token"
             continue
+
+        dataset = record['dataset']
+        date = record.get('date')
 
         print "Looking for URL to add to {}".format(dataset)
         process = None
@@ -78,7 +81,7 @@ def main(cnf=None):
             'url': first_url,
             'description': 'CSV',
             'format': 'CSV',
-            'date': '01/01/2016'
+            'date': date
         })
         invalidate_token(token)
         """

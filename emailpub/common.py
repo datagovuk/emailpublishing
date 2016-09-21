@@ -1,3 +1,4 @@
+import os
 import email
 import poplib
 import smtplib
@@ -14,6 +15,24 @@ import scraperwiki
 from jinja2 import Environment, PackageLoader
 
 env = Environment(loader=PackageLoader('emailpub', 'templates'))
+
+""" Tries to determine a name and a format for the url provided """
+def details_from_link(url):
+    from urlparse import urlparse
+
+    obj = urlparse(url)
+    if not obj.path:
+        return "Resource", "UNKNOWN"
+
+    name, ext = os.path.splitext(obj.path.split('/')[-1])
+    name = name.replace("_", " ")
+
+    if not ext:
+        ext = "UNKNOWN"
+    else:
+        ext = ext[1:].upper()
+
+    return name, ext
 
 """ Strips the email part from one that looks like
     NAME <email> """
@@ -35,13 +54,14 @@ def token_from_email(email):
 
 """ Given an email address and the name of a dataset, will return a
 newly formatted email address with a token inserted """
-def generate_token_and_address(email, dataset):
+def generate_token_and_address(email, dataset, date):
     import uuid
 
     d = {
         "token": str(uuid.uuid4()),
         "email": email,
-        "dataset": dataset
+        "dataset": dataset,
+        "date": date
     }
     scraperwiki.sql.save(["token"], d, table_name="tokens")
 
@@ -62,7 +82,7 @@ def validate_token(token, user_email):
     if record['email'] != raw_email(user_email):
         return False, None
 
-    return True, record['dataset']
+    return True, record
 
 """ Mark the given token as used """
 def invalidate_token(token):
@@ -180,3 +200,4 @@ def random_date(start, end):
     res = start + timedelta(
         seconds=randint(0, int((end - start).total_seconds())))
     return res.strftime("%d/%m/%Y")
+

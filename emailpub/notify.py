@@ -13,5 +13,14 @@ def main():
 
     for user in config.get_users():
         dataset = config.get_random_dataset()
-        address = common.generate_token_and_address(user, dataset.get('name'))
+
+        from common import random_date
+        from datetime import datetime, timedelta
+
+        start = datetime.now()
+        end = datetime.now() + timedelta(days=60)
+        date = random_date(start, end)
+
+
+        address = common.generate_token_and_address(user, dataset.get('name'), date)
         common.send_notification(user, "data.gov.uk <{}>".format(address), dataset)
