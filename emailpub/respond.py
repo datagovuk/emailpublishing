@@ -90,8 +90,7 @@ def main(cnf=None):
 
         print "Sending success message"
         send_success(email, config.this_email(), config.get_dataset(dataset))
-
-        #invalidate_token(token)
+        invalidate_token(token)
 
 
 
