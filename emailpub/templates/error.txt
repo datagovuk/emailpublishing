@@ -1,0 +1,20 @@
+
+
+#
+# This email is sent from an un-attended account.  If you need help please email
+# team@data.gov.uk for support.
+#
+
+
+Publishing Error
+===================
+
+There was a problem with your submission:
+
+<%= if url do %>
+    We were unable to retrieve the file from {{ url }}
+<%= else %>
+    We were unable to add the file to a dataset
+<%= end %>
+
+Please contact team@data.gov.uk for support.

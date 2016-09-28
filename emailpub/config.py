@@ -52,6 +52,12 @@ def get_random_dataset():
     datasets = get_datasets()
     return random.choice(datasets)
 
+def get_dataset(name):
+    result = [d for d in get_datasets() if d.get('name') == name]
+    if result:
+        return result[0]
+    return None
+
 def get_datasets():
     from common import random_date
     from datetime import datetime, timedelta

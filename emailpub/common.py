@@ -160,6 +160,41 @@ def send_notification(email, frm, dataset):
     s.sendmail(frm, email, msg.as_string())
     s.quit()
 
+def send_success(email, frm, dataset):
+    settings = config.outgoing_mail()
+
+    template_html = env.get_template('success.html')
+    rendered_html = template_html.render(dataset=dataset).encode('utf-8')
+
+    template_text = env.get_template('success.txt')
+    rendered_text = template_text.render(dataset=dataset).encode('utf-8')
+
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = "Dataset published"
+    msg['From'] = frm
+    msg['To'] = email
+
+    msg.add_header('reply-to', frm)
+
+    part1 = MIMEText(rendered_text, 'plain')
+    part2 = MIMEText(rendered_html, 'html')
+
+    msg.attach(part1)
+    msg.attach(part2)
+
+    sc = None
+    if settings.get('tls'):
+        sc = smtplib.SMTP_SSL
+    else:
+        sc = smtplib.SMTP
+
+    s = sc(settings.get('host'))
+    s.ehlo_or_helo_if_needed()
+
+    s.login(settings.get('username'), settings.get('password'))
+    s.sendmail(frm, email, msg.as_string())
+    s.quit()
+
 """ Generate a schedule for the user with the given email address """
 def generate_schedule(email):
     datasets = config.get_datasets()

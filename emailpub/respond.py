@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 import config
 
@@ -7,7 +8,8 @@ from common import (generate_schedule,
                     validate_token,
                     invalidate_token,
                     raw_email,
-                    token_from_email)
+                    token_from_email,
+                    send_success)
 
 URL_REGEX = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
 
@@ -75,15 +77,21 @@ def main(cnf=None):
         first_url = m[0]
         print "Processing first URL: {} and adding to {}".format(first_url, dataset)
 
-        """
-        print config.ckan().action.resource_create(**{
+
+        res = config.ckan().action.resource_create(**{
             'package_id': dataset,
             'url': first_url,
             'description': 'CSV',
             'format': 'CSV',
-            'date': date
+            'date': datetime.now().strftime("%d/%m/%Y")
         })
-        invalidate_token(token)
-        """
+
+        print res
+
+        print "Sending success message"
+        send_success(email, config.this_email(), config.get_dataset(dataset))
+
+        #invalidate_token(token)
+
 
 
