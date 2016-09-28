@@ -119,6 +119,7 @@ def get_latest_messages(n=10):
         stat, content_lines, size = pop.top(i, 111000)
         mail = email.message_from_string('\n'.join(content_lines))
         messages.append(mail)
+        pop.dele(i)
 
     pop.quit()
 

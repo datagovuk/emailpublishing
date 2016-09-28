@@ -40,6 +40,9 @@ class FakePOP3(POP3):
     def top(self, which, size):
         return self.retr(which)
 
+    def dele(self, which):
+        pass
+
     def retr(self, which):
         # ['response', ['line', ...], octets]
         filename = self.files[which-1]
